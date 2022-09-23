@@ -16,7 +16,7 @@ async function getTrendingMovies(){ //Nos trae las peliculas en tendencia
     const movies = data.results;
     console.log({movies});
 
-    const tredingPreviewMoviesSection = document.querySelector('#trendingPreview .trendingPreview-movieList')
+    const trendingMoviesPreviewList = document.querySelector('#trendingPreview .trendingPreview-movieList')
 
     movies.forEach(movie => { //Por cada pelicula le creamos una estructura HTML
         
@@ -29,7 +29,7 @@ async function getTrendingMovies(){ //Nos trae las peliculas en tendencia
         imgMovie.setAttribute('src', `https://image.tmdb.org/t/p/w300/${movie.poster_path}`); //https://image.tmdb.org/t/p/w300/ es la url base de las imagenes
 
         divMovie.append(imgMovie);
-        tredingPreviewMoviesSection.append(divMovie);
+        trendingMoviesPreviewList.append(divMovie);
     });
 }
 

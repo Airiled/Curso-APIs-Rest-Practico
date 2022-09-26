@@ -21,8 +21,8 @@ function locationPage(){
         trendsPage();
     }else if(location.hash.startsWith('#category=')){
         categoriesPage();
-    }else if(location.hash.startsWith('#movies=')){ //Vista especifica de una pelicula
-        moviesDetailsPage();
+    }else if(location.hash.startsWith('#movie=')){ //Vista especifica de una pelicula
+        movieDetailsPage();
     }else if(location.hash.startsWith('#search=')){ //Independientemente de la busqueda que se realiza se abrira esta vista
         searchPage();
     }else{
@@ -93,7 +93,7 @@ function categoriesPage(){  //vista de categorias
     getMoviesByCategory(id[1]);
 }
 
-function moviesDetailsPage(){
+function movieDetailsPage(){
     headerSection.classList.add('header-container--long');
     arrowBtn.classList.remove('inactive');
     arrowBtn.classList.add('header-arrow--white');
@@ -105,6 +105,15 @@ function moviesDetailsPage(){
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.add('inactive');
     movieDetailSection.classList.remove('inactive');
+
+    // ['category', 'id name']
+    const [_, idMovie] = location.hash.split('='); 
+    // const [categoryId, categoryName] = location.hash.split('-');
+    // headerCategoryTitle.innerHTML = searchValue;
+    // console.log(searchValue);
+
+    getMovieDetails(idMovie);
+
 }
 
 function searchPage(){

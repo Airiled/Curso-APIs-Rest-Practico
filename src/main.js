@@ -22,7 +22,9 @@ async function createMovies(movies, containerSection){
         imgMovie.classList.add('movie-img')
         imgMovie.setAttribute('alt', movie.tittle);
         imgMovie.setAttribute('src', `https://image.tmdb.org/t/p/w300${movie.poster_path}`); //https://image.tmdb.org/t/p/w300/ es la url base de las imagenes
-
+        imgMovie.addEventListener('click', () =>{
+            location.hash = `#movie=${movie.id}`;
+        })
         divMovie.append(imgMovie);
         containerSection.append(divMovie);
     });
@@ -100,6 +102,29 @@ async function getTrendingMoviesVist(){
     const { data } = await api(`trending/movie/day`);
     const trendingMovies = data.results;
     createMovies(trendingMovies, genericSection);
+}
+
+async function getMovieDetails(id){
+    const { data: movie } = await api(`movie/${id}`); 
+
+    console.log(movie);
+
+    movieDetailTitle.innerHTML = movie.title;
+    movieDetailScore.innerHTML = movie.vote_average;
+    movieDetailDescription.innerHTML = movie.overview;
+    movieDetailImage.style.background = 
+    `linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%), 
+    url(https://image.tmdb.org/t/p/w500${movie.poster_path})`;
+    
+    createCategories(movie.genres, movieDetailCategoriesList);
+    getMoviesRecomended(id);
+}
+
+async function getMoviesRecomended(id){
+    const { data } = await api(`movie/${id}/recommendations`);
+    const moviesRelated = data.results;
+
+    createMovies(moviesRelated, relatedMoviesContainer);
 }
 
 getTrendingMovies();

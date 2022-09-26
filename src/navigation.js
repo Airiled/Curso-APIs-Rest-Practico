@@ -7,17 +7,16 @@ trendingBtn.addEventListener('click', () => {
 });
 
 arrowBtn.addEventListener('click', () => {
-    location.hash = "#home";
+    history.back();
 });
 
 window.addEventListener('load', locationPage, false);
 window.addEventListener('hashchange', locationPage, false);
 
 function locationPage(){
-    console.log(location)
     if(location.hash.startsWith('#trends')){
         trendsPage();
-    }else if(location.hash.startsWith('#category')){
+    }else if(location.hash.startsWith('#category=')){
         categoriesPage();
     }else if(location.hash.startsWith('#movies=')){ //Vista especifica de una pelicula
         moviesDetailsPage();
@@ -26,6 +25,8 @@ function locationPage(){
     }else{
         homePage();
     }
+
+    window.scrollTo(0, 0);
 }
 
 function homePage(){
@@ -61,7 +62,7 @@ function trendsPage(){
   
 }
 
-function categoriesPage(){
+function categoriesPage(){  //vista de categorias
     console.log('categories!');
     headerSection.classList.remove('header-container--long');
     headerSection.style.background = '';
@@ -76,6 +77,14 @@ function categoriesPage(){
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
 
+    // ['category', 'id name']
+    const [_, categoryData] = location.hash.split('='); 
+    const [categoryId, categoryName] = location.hash.split('-');
+    console.log(categoryId.split('='));
+    headerCategoryTitle.innerHTML = categoryName;
+    const id = categoryId.split('=');
+
+    getMoviesByCategory(id[1]);
 }
 
 function moviesDetailsPage(){

@@ -8,14 +8,11 @@ const api = axios.create({
     },
 })
 
-async function getTrendingMovies(){ //Nos trae las peliculas en tendencia
-    const { data } = await api(`trending/movie/day`); // {  data    } con este obtenemos el objeto data de la url a la que estamos
-                                                      //haciendo la solicitud (tambien hay otros valores aparte de data que podemos obtener)
+//utils
 
-    trendingMoviesPreviewList.innerHTML ="";
+async function createMovies(movies, containerSection){
+    containerSection.innerHTML ="";
     
-
-    const movies = data.results;
     movies.forEach(movie => { //Por cada pelicula le creamos una estructura HTML
         
         const divMovie = document.createElement('div');
@@ -24,20 +21,18 @@ async function getTrendingMovies(){ //Nos trae las peliculas en tendencia
         const imgMovie = document.createElement('img');
         imgMovie.classList.add('movie-img')
         imgMovie.setAttribute('alt', movie.tittle);
-        imgMovie.setAttribute('src', `https://image.tmdb.org/t/p/w300/${movie.poster_path}`); //https://image.tmdb.org/t/p/w300/ es la url base de las imagenes
+        imgMovie.setAttribute('src', `https://image.tmdb.org/t/p/w300${movie.poster_path}`); //https://image.tmdb.org/t/p/w300/ es la url base de las imagenes
 
         divMovie.append(imgMovie);
-        trendingMoviesPreviewList.append(divMovie);
+        containerSection.append(divMovie);
     });
 }
 
-async function getCategoriesPreviewThemes(){ //Nos trae las categorias y sus temas(colores)
-    const { data } = await api(`genre/movie/list`); 
-   
-    categoriesPreviewSection.innerHTML = "";
+async function createCategories(categories, containerSection){
 
-    const categories = data.genres;
-    data.genres.forEach(category => { //Por cada pelicula le creamos una estructura HTML
+    containerSection.innerHTML = "";
+
+    categories.forEach(category => { //Por cada pelicula le creamos una estructura HTML
         
         const divCategory = document.createElement('div');
         divCategory.classList.add('category-container');
@@ -45,12 +40,48 @@ async function getCategoriesPreviewThemes(){ //Nos trae las categorias y sus tem
         const h3Category = document.createElement('h3');
         h3Category.classList.add('category-title');
         h3Category.setAttribute('id', `id${category.id}`);
+        h3Category.addEventListener('click', () => {
+            location.hash = `#category=${category.id}-${category.name}`;
+            console.log(`${category.id} y ademas ${category.name}`);
+        });
         const textCategory = document.createTextNode(category.name);
 
         h3Category.appendChild(textCategory);
         divCategory.append(h3Category);
-        categoriesPreviewSection.append(divCategory);
+        containerSection.append(divCategory);
     });
+}
+
+//llamados a API
+
+async function getTrendingMovies(){ //Nos trae las peliculas en tendencia
+    const { data } = await api(`trending/movie/day`); // {  data    } con este obtenemos el objeto data de la url a la que estamos
+                                                      //haciendo la solicitud (tambien hay otros valores aparte de data que podemos obtener)
+
+    const movies = data.results;
+
+    createMovies(movies, trendingMoviesPreviewList);
+}
+
+async function getCategoriesPreviewThemes(){ //Nos trae las categorias y sus temas(colores)
+    const { data } = await api(`genre/movie/list`); 
+    const categories = data.genres;
+
+    createCategories(categories, categoriesPreviewSection);
+}
+
+async function getMoviesByCategory(categoryId){
+        const { data } = await api(`discover/movie`,{
+        params:{
+            with_genres: categoryId,
+        },
+    }); 
+
+    const movies = data.results;
+    console.log(data.results);
+
+   
+    createMovies(movies, genericSection);
 }
 
 

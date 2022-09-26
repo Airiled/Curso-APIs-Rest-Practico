@@ -84,6 +84,23 @@ async function getMoviesByCategory(categoryId){
     createMovies(movies, genericSection);
 }
 
+async function getMoviesBySearch(query){
+    const { data } = await api(`search/movie`, {
+        params:{
+            query,
+        },
+    });
+    const resultSearch = data.results;
+
+    createMovies(resultSearch, genericSection);
+
+}
+
+async function getTrendingMoviesVist(){
+    const { data } = await api(`trending/movie/day`);
+    const trendingMovies = data.results;
+    createMovies(trendingMovies, genericSection);
+}
 
 getTrendingMovies();
 getCategoriesPreviewThemes();

@@ -1,5 +1,6 @@
 searchFormBtn.addEventListener('click', () => {
-    location.hash = "#search=";
+    searchFormInput.value;
+    location.hash = `#search=${searchFormInput.value}`;
 });
 
 trendingBtn.addEventListener('click', () => {
@@ -9,6 +10,8 @@ trendingBtn.addEventListener('click', () => {
 arrowBtn.addEventListener('click', () => {
     history.back();
 });
+
+// trendingBtn.addEventListener('click', );
 
 window.addEventListener('load', locationPage, false);
 window.addEventListener('hashchange', locationPage, false);
@@ -59,7 +62,10 @@ function trendsPage(){
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    headerCategoryTitle.innerHTML = 'Trending Movies (Week)';
   
+    getTrendingMoviesVist();
 }
 
 function categoriesPage(){  //vista de categorias
@@ -115,5 +121,14 @@ function searchPage(){
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    // ['category', 'id name']
+    const [_, searchValue] = location.hash.split('='); 
+    // const [categoryId, categoryName] = location.hash.split('-');
+    headerCategoryTitle.innerHTML = searchValue;
+    console.log(searchValue);
+    getMoviesBySearch(searchValue);
+
+    // getMoviesBySearch(search);
 }
 

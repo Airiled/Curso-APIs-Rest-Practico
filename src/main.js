@@ -1,3 +1,5 @@
+const API_KEY = '60015244d82fe2c8b8642fe9d7693368';
+
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3/',
     headers:{
